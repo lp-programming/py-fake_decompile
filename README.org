@@ -42,8 +42,9 @@ def fake_decompile(func, seekdef = False):
             args.append(names[i])
         for i in range(kwonly):
             kw.append(names[i+argcount])
-        for i in reversed(defaults):
-            args[-1 -i] += f"={repr(i)}"
+        if defaults:
+            for i in reversed(defaults):
+                args[-1 -i] += f"={repr(i)}"
         for idx, i in enumerate(kw):
             if i in kwdefaults:
                kw[idx] += f"={repr(kwdefaults[i])}"
@@ -60,6 +61,8 @@ def fake_decompile(func, seekdef = False):
 
         args.extend(kw)
         signature = f"def {func.__name__}({str.join(', ', args)}):\n"
+        return str.join("", [signature, *lines[start:end]])
+
     
 
 #+end_src
